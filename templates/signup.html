@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Signup Page</title>
+    <link rel="stylesheet" href="static/css/signupstyle.css">
+    <script>
+        function validateForm() {
+            const checkbox = document.getElementById('terms-checkbox');
+            if (!checkbox.checked) {
+                alert('You must agree to the Terms and Conditions before continuing.');
+                return false;
+            }
+            return true;
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <div class="title-bar"></div>
+        <div class="title">Create an Account</div>
+        <div class="auth-options">
+            <div class="signup">Signup</div>
+            <div class="login">
+                <a href="/login" style="text-decoration: none; color: #007BFF;">Login</a>
+            </div>
+        </div>
+
+        <!-- Signup form starts here -->
+        <form action="/signup" method="POST" onsubmit="return validateForm()">
+            <div class="input-field">
+                <input type="text" name="hospital_name" placeholder="Hospital Name" required>
+            </div>
+            <div class="input-field">
+                <input type="text" name="hospital_id" placeholder="Hospital ID" required>
+            </div>
+            <div class="input-field">
+                <input type="text" name="department" placeholder="Department" required>
+            </div>
+            <div class="input-field">
+                <input type="text" name="department_id" placeholder="Department ID" required>
+            </div>
+            <div class="input-field">
+                <input type="text" name="admin_username" placeholder="Admin Username" required>
+            </div>
+            <div class="input-field">
+                <input type="password" name="admin_password" placeholder="Admin Password" required>
+            </div>
+            <div class="input-field">
+                <input type="password" name="confirm_password" placeholder="Confirm Password" required>
+            </div>
+            <div class="input-field">
+                <input type="email" name="email_address" placeholder="Email Address" required>
+            </div>
+            <div class="input-field">
+                <input type="text" name="verification_code" placeholder="Verification Code" required>
+            </div>
+
+            <button type="submit" class="continue-button">Continue</button>
+        </form>
+        <!-- Signup form ends here -->
+
+        <div class="checkbox-container">
+            <input type="checkbox" id="terms-checkbox" class="checkbox">
+            <label for="terms-checkbox" class="checkbox-label">
+                <span class="checkbox-checkmark"></span>
+                I agree to the Terms and Conditions
+            </label>
+        </div>
+    </div>
+</body>
+</html>

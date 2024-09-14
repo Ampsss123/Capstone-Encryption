@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+    <link rel="stylesheet" href="static/css/loginstyle.css">
+    <script>
+        function validateForm() {
+            const checkbox = document.getElementById('terms-checkbox');
+            if (!checkbox.checked) {
+                alert('You must agree to the Terms and Conditions before continuing.');
+                return false;  // Prevent form submission
+            }
+            return true;  // Allow form submission
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <div class="title">Login to Your Account</div>
+        <form action="/login" method="POST" onsubmit="return validateForm()">
+            <div class="input-field">
+                <input type="text" name="hospital_name" placeholder="Hospital Name" required>
+            </div>
+            <div class="input-field">
+                <input type="text" name="hospital_id" placeholder="Hospital ID" required>
+            </div>
+            <div class="input-field">
+                <input type="text" name="department" placeholder="Department" required>
+            </div>
+            <div class="input-field">
+                <input type="text" name="department_id" placeholder="Department ID" required>
+            </div>
+            <div class="input-field">
+                <input type="password" name="admin_password" placeholder="Admin Password" required>
+            </div>
+            <div class="input-field">
+                <input type="email" name="email_address" placeholder="Email Address" required>
+            </div>
+            <div class="input-field">
+                <input type="text" name="verification_code" placeholder="Verification Code" required>
+            </div>
+            <button type="submit" class="continue-button">Login</button>
+        </form>
+        <div class="checkbox-container">
+            <input type="checkbox" id="terms-checkbox" class="checkbox">
+            <label for="terms-checkbox">I agree to the Terms and Conditions</label>
+        </div>
+    </div>
+</body>
+</html>

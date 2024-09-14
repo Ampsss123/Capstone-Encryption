@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload or Encrypt Medical Dataset</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/upload.css') }}">
+</head>
+
+<body>
+    <div class="container">
+        <h1>Upload or Encrypt Medical Dataset</h1>
+
+        {% if not session.get('logged_in') %}
+        <div>
+            <p>You are not logged in. <a href="{{ url_for('login') }}">Login here</a>.</p>
+        </div>
+        {% else %}
+        <!-- Display flash messages -->
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        <div class="flash-messages">
+            {% for message in messages %}
+            <p>{{ message }}</p>
+            {% endfor %}
+        </div>
+        {% endif %}
+        {% endwith %}
+
+        <form method="POST" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="file">Or Enter CSV File Path:</label>
+                <input type="file" name="file" id="file" placeholder="Enter full path of the CSV file" class="file-input">
+            </div>
+            <button type="submit" class="upload-button">Upload/Encrypt File</button>
+        </form>
+        {% endif %}
+    </div>
+</body>
+
+</html>

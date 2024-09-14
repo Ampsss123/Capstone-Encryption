@@ -1,0 +1,185 @@
+/* Global styles */
+body, html {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    box-sizing: border-box;
+    background-color: #f4f4f4;
+}
+
+.container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.title-bar {
+    height: 5px;
+    background-color: #007BFF;
+    margin-bottom: 20px;
+}
+
+.title {
+    font-size: 32px;
+    font-weight: bold;
+    color: #333;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.auth-options {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 10px;
+}
+
+.signup, .login {
+    font-size: 16px;
+    color: #007BFF;
+    cursor: pointer;
+    padding: 10px 20px;
+}
+
+.signup {
+    border-right: 1px solid #ccc;
+}
+
+.signup:hover, .login:hover {
+    color: #0056b3;
+}
+
+form {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.input-field {
+    margin: 10px 0;
+    width: 100%;
+    max-width: 500px;
+}
+
+.input-field input {
+    width: 100%;
+    padding: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+.continue-button {
+    width: 100%;
+    max-width: 500px;
+    padding: 15px;
+    background-color: #007BFF;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    font-size: 18px;
+    cursor: pointer;
+    margin: 20px 0;
+}
+
+.continue-button:hover {
+    background-color: #0056b3;
+}
+
+.terms {
+    font-size: 14px;
+    color: #666;
+    text-align: center;
+    margin-top: 20px;
+    padding: 0 20px;
+}
+
+/* Custom checkbox styles */
+.checkbox-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.checkbox {
+    width: 20px;
+    height: 20px;
+    border: 2px solid #007BFF;
+    border-radius: 3px;
+    cursor: pointer;
+    margin-right: 10px;
+    position: relative;
+}
+
+.checkbox-tick, .checkbox-tick-2 {
+    position: absolute;
+    background-color: #007BFF;
+    border-radius: 3px;
+    transform-origin: left bottom;
+    visibility: hidden;
+}
+
+.checkbox-tick {
+    width: 2px;
+    height: 8px;
+    top: 4px;
+    left: 6px;
+    transform: rotate(45deg);
+}
+
+.checkbox-tick-2 {
+    width: 2px;
+    height: 12px;
+    top: 0;
+    left: 10px;
+    transform: rotate(-45deg);
+}
+
+.checkbox:hover .checkbox-tick, .checkbox:hover .checkbox-tick-2 {
+    visibility: visible;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .input-field {
+        max-width: 100%;
+    }
+
+    .continue-button {
+        max-width: 100%;
+    }
+
+    .terms {
+        padding: 0 10px;
+    }
+
+    .auth-options {
+        flex-direction: column;
+    }
+
+    .signup, .login {
+        border-right: none;
+        padding: 5px 10px;
+    }
+}
+
+@media (max-width: 480px) {
+    .title {
+        font-size: 24px;
+    }
+
+    .signup, .login {
+        font-size: 14px;
+    }
+
+    .continue-button {
+        font-size: 16px;
+        padding: 12px;
+    }
+
+    .terms {
+        font-size: 12px;
+    }
+}
