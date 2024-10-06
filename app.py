@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, flash, session
+from flask import Flask, render_template, request, redirect, url_for, flash, make_response, session
 import mysql.connector
 from mysql.connector import Error
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -8,6 +8,7 @@ from cryptography.hazmat.primitives import padding
 from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
 from cryptography.hazmat.primitives import hashes
 import os
+import io
 import base64
 from werkzeug.utils import secure_filename
 import csv
@@ -230,6 +231,54 @@ def manual_entry():
         return redirect(url_for('home'))  # Redirect to home after submission
     return render_template('manual_entry.html')
 
+@app.route('/submit_data', methods=['POST'])
+def submit_data():
+    # Retrieve the field names and values from the form
+    field_names = request.form.getlist('field_names[]')
+    field_values = request.form.getlist('field_values[]')
+
+    # Ensure fields are provided
+    if not field_names or not field_values:
+        flash('Fields cannot be empty!')
+        return redirect(url_for('manual_entry'))
+
+    # Group the values by their respective fields
+    field_data = {}
+    for field_name, field_value in zip(field_names, field_values):
+        if field_name in field_data:
+            field_data[field_name].append(field_value)  # Add new value under the same field
+        else:
+            field_data[field_name] = [field_value]
+
+    # Create an in-memory CSV file
+    output = io.StringIO()
+    writer = csv.writer(output)
+
+    # Write the field names (as columns in a single row)
+    writer.writerow(field_data.keys())  # Field names as column headers
+
+    # Transpose the data and write the rows for each value under the correct field
+    # Find the maximum number of entries for any field (to handle varying row lengths)
+    max_rows = max(len(values) for values in field_data.values())
+
+    for i in range(max_rows):
+        row = []
+        for values in field_data.values():
+            if i < len(values):
+                row.append(values[i])  # Add value if it exists
+            else:
+                row.append('')  # Add an empty string if no value exists
+        writer.writerow(row)
+
+    # Reset the in-memory file's position to the beginning
+    output.seek(0)
+
+    # Create a response object to return the CSV file as a download
+    response = make_response(output.getvalue())
+    response.headers['Content-Disposition'] = 'attachment; filename=dataset.csv'
+    response.headers['Content-Type'] = 'text/csv'
+
+    return response
 
 if __name__ == '__main__':
     app.run(debug=True)
