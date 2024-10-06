@@ -13,12 +13,15 @@
     <div class="container">
         <h1>Upload or Encrypt Medical Dataset</h1>
 
+        <!-- If the user is not logged in, prompt them to log in -->
         {% if not session.get('logged_in') %}
         <div>
             <p>You are not logged in. <a href="{{ url_for('login') }}">Login here</a>.</p>
         </div>
         {% else %}
-        <!-- Display flash messages -->
+        <!-- If logged in, show the file upload form -->
+
+        <!-- Display any flash messages (e.g., success or error messages) -->
         {% with messages = get_flashed_messages() %}
         {% if messages %}
         <div class="flash-messages">
@@ -29,13 +32,22 @@
         {% endif %}
         {% endwith %}
 
-        <form method="POST" enctype="multipart/form-data">
+        <!-- File upload form -->
+        <form action="{{ url_for('upload_file') }}" method="POST" enctype="multipart/form-data">
             <div class="form-group">
-                <label for="file">Or Enter CSV File Path:</label>
-                <input type="file" name="file" id="file" placeholder="Enter full path of the CSV file" class="file-input">
+                <label for="file">Upload CSV File:</label>
+                <input type="file" name="file" id="file" class="file-input">
             </div>
             <button type="submit" class="upload-button">Upload/Encrypt File</button>
         </form>
+
+        <!-- Manual data entry option -->
+        <div class="manual-entry">
+            <p>Don't have a CSV file? You can manually enter the data:</p>
+            <a href="{{ url_for('manual_entry') }}">
+                <button class="manual-entry-button">Manual Entry</button>
+            </a>
+        </div>
         {% endif %}
     </div>
 </body>
