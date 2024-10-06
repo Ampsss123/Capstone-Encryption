@@ -221,5 +221,15 @@ def encrypt_csv(filepath, key):
     encrypted_csv = '\n'.join([','.join(row) for row in encrypted_rows])
     return encrypted_csv.encode()
 
+@app.route('/manual_entry', methods=['GET', 'POST'])
+def manual_entry():
+    if request.method == 'POST':
+        # Handle manual data entry here
+        data = request.form['data']  # Assuming you have a form field named 'data'
+        flash('Manual entry submitted successfully.')
+        return redirect(url_for('home'))  # Redirect to home after submission
+    return render_template('manual_entry.html')
+
+
 if __name__ == '__main__':
     app.run(debug=True)
