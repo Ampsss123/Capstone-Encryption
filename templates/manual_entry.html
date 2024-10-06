@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manual Entry</title>
+    <link rel="stylesheet" href="static/css/manual_entry.css">
+    <style>
+        .form-group {
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Enter Your Dataset Manually</h1>
+        <form action="/submit_data" method="POST">
+            <div id="fields-container">
+                <!-- Initial input fields -->
+                <div class="form-group">
+                    <label for="field_name_1">Field Name:</label>
+                    <input type="text" name="field_names[]" id="field_name_1" placeholder="Enter field name" required>
+                    <label for="field_value_1">Field Value:</label>
+                    <input type="text" name="field_values[]" id="field_value_1" placeholder="Enter field value" required>
+                </div>
+            </div>
+
+            <!-- Button to add more fields -->
+            <div class="form-group">
+                <button type="button" id="add-field" class="submit-button">Add Another Field</button>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="submit-button">Submit Dataset</button>
+                <a href="{{ url_for('upload_file') }}" class="back-button">Go Back</a>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        let fieldCount = 1;
+
+        document.getElementById('add-field').addEventListener('click', function() {
+            fieldCount++;
+            const container = document.getElementById('fields-container');
+            const newFieldGroup = document.createElement('div');
+            newFieldGroup.className = 'form-group';
+            newFieldGroup.innerHTML = `
+                <label for="field_name_${fieldCount}">Field Name:</label>
+                <input type="text" name="field_names[]" id="field_name_${fieldCount}" placeholder="Enter field name" required>
+                <label for="field_value_${fieldCount}">Field Value:</label>
+                <input type="text" name="field_values[]" id="field_value_${fieldCount}" placeholder="Enter field value" required>
+            `;
+            container.appendChild(newFieldGroup);
+        });
+    </script>
+</body>
+</html>
