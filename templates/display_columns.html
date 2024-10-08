@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSV Column Names</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/display_columns.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h2>Column Names from CSV</h2>
+        
+        <div class="form-card">
+            <form action="{{ url_for('perform_operation') }}" method="POST">
+                <label for="selected_column">Select Column:</label>
+                <select name="selected_column" id="selected_column">
+                    {% for column in columns %}
+                        <option value="{{ column }}" {% if column == selected_value %}selected{% endif %}>{{ column }}</option>
+                    {% endfor %}
+                </select>
+                
+                <div class="operations">
+                    <button type="submit" name="operation" value="sum">Sum</button>
+                    <button type="submit" name="operation" value="average">Average</button>
+                    <button type="submit" name="operation" value="min">Minimum</button>
+                    <button type="submit" name="operation" value="max">Maximum</button>
+                </div>
+            </form>
+        </div>
+
+        {% if result is not none %}
+            <div class="result-card">
+                <h3>Result: {{ result }}</h3>
+            </div>
+        {% endif %}
+    </div>
+</body>
+</html>
