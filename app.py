@@ -7,6 +7,7 @@ from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives import padding
 from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
 from cryptography.hazmat.primitives import hashes
+import pandas as pd
 import os
 import io
 import base64
@@ -193,19 +194,34 @@ def upload_file():
             filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
             file.save(filepath)
 
-            # Read CSV and encrypt the content
-            key, salt = generate_key('encryptionpassword')  # Example password
-            encrypted_data = encrypt_csv(filepath, key)
+            # Store the file path in the session
+            session['uploaded_file_path'] = filepath  # Store uploaded file path in the session
 
-            # Save encrypted file (for demonstration purposes)
-            encrypted_filename = 'encrypted_' + filename
+            # Encrypt the CSV file
+            key, salt = generate_key("your_password")  # You should get the password from the user or environment variable
+            encrypted_csv_data = encrypt_csv(filepath, key)  # Encrypt the CSV data
+
+            # Save the encrypted data to a new file
+            encrypted_filename = f"encrypted_{filename}"
             encrypted_filepath = os.path.join(app.config['UPLOAD_FOLDER'], encrypted_filename)
-            with open(encrypted_filepath, 'wb') as enc_file:
-                enc_file.write(encrypted_data)
 
-            flash(f'File successfully uploaded and encrypted as {encrypted_filename}')
-            return redirect(url_for('login'))
+            with open(encrypted_filepath, 'wb') as enc_file:
+                enc_file.write(encrypted_csv_data)
+
+            # Render the column selection page
+            try:
+                df = pd.read_csv(filepath)
+                column_names = df.columns.tolist()  # Extract column names
+                flash('File uploaded and encrypted successfully!')
+                return render_template('display_columns.html', columns=column_names)
+            except Exception as e:
+                flash(f"Error processing file: {str(e)}")
+                return redirect(request.url)
+
     return render_template('upload.html')
+
+
+
 
 def encrypt_csv(filepath, key):
     with open(filepath, newline='') as csvfile:
@@ -279,6 +295,46 @@ def submit_data():
     response.headers['Content-Type'] = 'text/csv'
 
     return response
+
+@app.route('/perform_operation', methods=['POST'])
+def perform_operation():
+    selected_column = request.form['selected_column']
+    operation = request.form['operation']
+
+    # Get the uploaded file path from the session
+    filepath = session.get('uploaded_file_path')
+
+    if not filepath:
+        flash('No uploaded file found. Please upload a file first.')
+        return redirect(url_for('upload_file'))
+
+    try:
+        df = pd.read_csv(filepath)
+
+        if selected_column not in df.columns:
+            flash('Selected column not found!')
+            return redirect(url_for('upload_file'))
+
+        # Perform the requested operation
+        result = None
+        if operation == 'sum':
+            result = df[selected_column].sum()
+        elif operation == 'average':
+            result = df[selected_column].mean()
+        elif operation == 'min':
+            result = df[selected_column].min()
+        elif operation == 'max':
+            result = df[selected_column].max()
+
+        return render_template('display_columns.html', 
+                               columns=df.columns.tolist(), 
+                               result=result, 
+                               selected_value=selected_column)  # Pass the selected column back to the template
+
+    except Exception as e:
+        flash(f"Error processing operation: {str(e)}")
+        return redirect(url_for('upload_file'))
+
 
 if __name__ == '__main__':
     app.run(debug=True)
