@@ -221,8 +221,6 @@ def upload_file():
     return render_template('upload.html')
 
 
-
-
 def encrypt_csv(filepath, key):
     with open(filepath, newline='') as csvfile:
         reader = csv.reader(csvfile)
@@ -315,16 +313,20 @@ def perform_operation():
             flash('Selected column not found!')
             return redirect(url_for('upload_file'))
 
-        # Perform the requested operation
-        result = None
-        if operation == 'sum':
-            result = df[selected_column].sum()
-        elif operation == 'average':
-            result = df[selected_column].mean()
-        elif operation == 'min':
-            result = df[selected_column].min()
-        elif operation == 'max':
-            result = df[selected_column].max()
+        # Check if the selected column is numeric
+        if not pd.api.types.is_numeric_dtype(df[selected_column]):
+            result = "No operation can be performed on a text column."
+        else:
+            # Perform the requested operation
+            result = None
+            if operation == 'sum':
+                result = df[selected_column].sum()
+            elif operation == 'average':
+                result = df[selected_column].mean()
+            elif operation == 'min':
+                result = df[selected_column].min()
+            elif operation == 'max':
+                result = df[selected_column].max()
 
         return render_template('display_columns.html', 
                                columns=df.columns.tolist(), 
@@ -334,7 +336,6 @@ def perform_operation():
     except Exception as e:
         flash(f"Error processing operation: {str(e)}")
         return redirect(url_for('upload_file'))
-
 
 if __name__ == '__main__':
     app.run(debug=True)
