@@ -23,7 +23,7 @@ ALLOWED_EXTENSIONS = {'csv'}
 db_config = {
     'host': 'localhost',        # Your MySQL host
     'user': 'root',             # Your MySQL username
-    'password': 'vanillaice@1',  # Your MySQL password
+    'password': '**********',  # Your MySQL password
     'database': 'hospital_db'   # The database name you want to connect to
 }
 
